@@ -171,6 +171,22 @@ export function updateKapacitorConfigSection(kapacitor, section, properties) {
   })
 }
 
+export function addKapacitorConfigInSection(kapacitor, section, properties) {
+  return AJAX({
+    method: 'POST',
+    url: kapacitor.links.proxy,
+    params: {
+      path: `/kapacitor/v1/config/${section}/`,
+    },
+    data: {
+      add: properties,
+    },
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+}
+
 export const testAlertOutput = async (kapacitor, outputName) => {
   try {
     const {
