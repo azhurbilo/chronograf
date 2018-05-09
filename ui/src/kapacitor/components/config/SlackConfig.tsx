@@ -5,6 +5,7 @@ import {ErrorHandling} from 'src/shared/decorators/errors'
 interface Properties {
   channel: string
   url: string
+  workspace?: string
 }
 
 interface Config {
@@ -116,10 +117,12 @@ class SlackConfig extends PureComponent<Props, State> {
   private handleSubmit = async e => {
     const {isNewConfig} = this.props
     e.preventDefault()
-    const properties = {
+    const properties: Properties = {
       url: this.url.value,
       channel: this.channel.value,
-      workspace: this.workspace.value,
+    }
+    if (isNewConfig) {
+      properties.workspace = this.workspace.value
     }
     const success = await this.props.onSave(properties, isNewConfig)
     if (success) {
