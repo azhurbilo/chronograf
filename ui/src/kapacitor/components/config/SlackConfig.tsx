@@ -43,6 +43,7 @@ class SlackConfig extends PureComponent<Props, State> {
   public render() {
     const {url, channel, workspace} = this.props.config.options
     const {testEnabled} = this.state
+    const workspaceID = workspace || 'default'
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -50,11 +51,11 @@ class SlackConfig extends PureComponent<Props, State> {
           <label htmlFor="nickname">Nickname this Configuration</label>
           <input
             className="form-control"
-            id="nickname"
+            id={`${workspaceID}-nickname`}
             type="text"
             placeholder="Optional unless multiple Slack configurations exist"
             ref={r => (this.workspace = r)}
-            defaultValue={workspace}
+            defaultValue={workspace || ''}
             onChange={this.disableTest}
           />
         </div>
@@ -68,7 +69,7 @@ class SlackConfig extends PureComponent<Props, State> {
           </label>
           <RedactedInput
             defaultValue={url}
-            id="url"
+            id={`${workspaceID}-url`}
             refFunc={this.handleUrlRef}
             disableTest={this.disableTest}
             isFormEditing={!testEnabled}
@@ -79,7 +80,7 @@ class SlackConfig extends PureComponent<Props, State> {
           <label htmlFor="slack-channel">Slack Channel (optional)</label>
           <input
             className="form-control"
-            id="slack-channel"
+            id={`${workspaceID}-slack-channel`}
             type="text"
             placeholder="#alerts"
             ref={r => (this.channel = r)}
