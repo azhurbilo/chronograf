@@ -155,12 +155,20 @@ export const getKapacitorConfigSection = (kapacitor, section) => {
   return kapacitorProxy(kapacitor, 'GET', `/kapacitor/v1/config/${section}`, '')
 }
 
-export function updateKapacitorConfigSection(kapacitor, section, properties) {
+export function updateKapacitorConfigSection(
+  kapacitor,
+  section,
+  properties,
+  specificConfig
+) {
+  const config = specificConfig || ''
+  const path = `/kapacitor/v1/config/${section}/${config}`
+
   return AJAX({
     method: 'POST',
     url: kapacitor.links.proxy,
     params: {
-      path: `/kapacitor/v1/config/${section}/`,
+      path,
     },
     data: {
       set: properties,
