@@ -24,6 +24,7 @@ interface Props {
     specificConfig: string
   ) => void
   onTest: (event: React.MouseEvent<HTMLButtonElement>) => void
+  onDelete: (specificConfig: string) => void
   enabled: boolean
   isNewConfig: boolean
 }
@@ -55,6 +56,8 @@ class SlackConfig extends PureComponent<Props, State> {
     const {testEnabled} = this.state
     const workspaceID = workspace || 'default'
 
+    const isNickNameEnabled = isNewConfig && !testEnabled
+
     return (
       <form onSubmit={this.handleSubmit}>
         <div className="form-group col-xs-12">
@@ -63,11 +66,11 @@ class SlackConfig extends PureComponent<Props, State> {
             className="form-control"
             id={`${workspaceID}-nickname`}
             type="text"
-            placeholder="Optional unless multiple Slack configurations exist"
+            placeholder="Only for additional Configurations"
             ref={r => (this.workspace = r)}
             defaultValue={workspace || ''}
             onChange={this.disableTest}
-            disabled={!isNewConfig}
+            disabled={!isNickNameEnabled}
           />
         </div>
         <div className="form-group col-xs-12">
@@ -117,6 +120,10 @@ class SlackConfig extends PureComponent<Props, State> {
             <span className="icon pulse-c" />
             Send Test Alert
           </button>
+          <button className="btn btn-danger" onClick={this.handleDelete}>
+            <span className="icon trash" />
+            Delete
+          </button>
         </div>
         <br />
         <br />
@@ -142,6 +149,11 @@ class SlackConfig extends PureComponent<Props, State> {
     if (success) {
       this.setState({testEnabled: true})
     }
+  }
+
+  private handleDelete = async e => {
+    e.preventDefault()
+    await this.props.onDelete(this.workspace.value)
   }
 
   private disableTest = () => {

@@ -195,6 +195,28 @@ export function addKapacitorConfigInSection(kapacitor, section, properties) {
   })
 }
 
+export function deleteKapacitorConfigInSection(
+  kapacitor,
+  section,
+  specificConfig
+) {
+  const path = `/kapacitor/v1/config/${section}`
+
+  return AJAX({
+    method: 'POST',
+    url: kapacitor.links.proxy,
+    params: {
+      path,
+    },
+    data: {
+      remove: [specificConfig],
+    },
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+}
+
 export const testAlertOutput = async (kapacitor, outputName) => {
   try {
     const {
